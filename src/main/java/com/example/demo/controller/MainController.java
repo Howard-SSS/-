@@ -18,8 +18,11 @@ public class MainController {
     public String mainMapper() throws IOException, InvalidFormatException {
         File xlsFile = new File("C:\\Users\\Administrator\\Desktop\\x.xlsx"),
                 docxFile = new File("C:\\Users\\Administrator\\Desktop\\1.docx");
-        List<Word> read = ReadXlsx.read(xlsFile);
-        WriteDocx.write(docxFile, read);
+        ReadXlsx readXlsx = new ReadXlsx();
+        WriteDocx writeDocx = new WriteDocx();
+
+        List<Word> read = readXlsx.read(xlsFile);
+        writeDocx.write(docxFile, read);
         return "finish";
     }
 }

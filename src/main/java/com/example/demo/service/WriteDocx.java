@@ -1,6 +1,11 @@
 package com.example.demo.service;
 
+import cn.hutool.Hutool;
+import cn.hutool.http.HtmlUtil;
+import cn.hutool.http.HttpRequest;
+import com.example.demo.baike.Wiki;
 import com.example.demo.empty.Word;
+import com.example.demo.regex.MatchRule;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -9,9 +14,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class WriteDocx {
-    private static void write(XWPFDocument xwpfDocument, Word word){
+
+    private void write(XWPFDocument xwpfDocument, Word word){
         XWPFParagraph paragraph = xwpfDocument.createParagraph();
         XWPFRun run = paragraph.createRun();
         run.setText("Ch" + word.getNum());
@@ -23,14 +30,31 @@ public class WriteDocx {
         run.addBreak();
         run.setText(word.getDescribe());
         run.addBreak();
+
+        MatchRule matchRule = new MatchRule();
+        matchRule.compile("ONE_AND_TWO");
+        Map<String, String> map = matchRule.match(Wiki.getPageBody(word.getName()));
+        otherWrite(run, map);
     }
-    private static void write(XWPFDocument xwpfDocument, List<Word> words){
-        words.forEach((word) -> WriteDocx.write(xwpfDocument, word));
+    private void write(XWPFDocument xwpfDocument, List<Word> words){
+        words.forEach((word) -> this.write(xwpfDocument, word));
     }
-    public static void write(File file, List<Word> words) throws IOException {
+
+    public void write(File file, List<Word> words) throws IOException {
         XWPFDocument xwpfDocument = new XWPFDocument();
         write(xwpfDocument, words);
-        xwpfDocument.write(new FileOutputStream(file));
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        xwpfDocument.write(fileOutputStream);
+        fileOutputStream.close();
         xwpfDocument.close();
+    }
+
+    public static void otherWrite(XWPFRun xwpfRun, Map<String, String> map){
+        map.forEach((k,v) -> {
+            xwpfRun.setText(k);
+            xwpfRun.addBreak();
+            xwpfRun.setText(v);
+            xwpfRun.addBreak();
+        });
     }
 }
