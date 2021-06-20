@@ -16,7 +16,7 @@ public class MainController {
 
     @RequestMapping("/start")
     public String mainMapper() throws IOException, InvalidFormatException {
-        File xlsFile = new File("C:\\Users\\Administrator\\Desktop\\E001-181-3107-曾嘉俊-6.xlsx"),
+        File xlsFile = new File("C:\\Users\\Administrator\\Desktop\\x.xlsx"),
                 docxFile = new File("C:\\Users\\Administrator\\Desktop\\1.docx");
         List<Word> read = ReadXlsx.read(xlsFile);
         WriteDocx.write(docxFile, read);
