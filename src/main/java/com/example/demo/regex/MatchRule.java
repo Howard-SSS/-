@@ -1,12 +1,9 @@
 package com.example.demo.regex;
 
 import cn.hutool.http.HtmlUtil;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
-import org.apache.xmlbeans.impl.regex.Match;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -18,35 +15,43 @@ public class MatchRule {
     private Properties properties = null;
     private Pattern pattern;
 
-    public MatchRule(){
+    public MatchRule() {
         load();
     }
-    public boolean compile(String key){
+
+    public boolean compile(String key) {
         String r = properties.getProperty(key);
-        if(r == null)
+        if (r == null)
             return false;
         pattern = Pattern.compile(r);
         return true;
     }
-    public Map<String,String> match(String content){
-        if(properties == null)
+
+    public Map<String, String> match(String content) {
+        if (properties == null)
             throw new NullPointerException("can't find file(application.properties)");
         Map<String, String> ret = new HashMap<>();
         Matcher matcher = pattern.matcher(content);
-        for(int i=0;i<2;i++){
-            if(!matcher.find())
+        for (int i = 0; i < 2; i++) {
+            if (!matcher.find())
                 break;
-            String k = matcher.group(0);
+            String k = matcher.group(1);
             // 去除<p>标签
-            String v = HtmlUtil.unwrapHtmlTag(matcher.group(1), "p");
-            ret.put(k,v);
+            String v = HtmlUtil.unwrapHtmlTag(matcher.group(2), "p","img","b","li");
+            ret.put(k, v);
         }
         return ret;
     }
-    public void load(){
+
+    public void load() {
         try {
-            properties.load(new FileInputStream(new File("application.properties")));
-        }catch (IOException e){}
+            InputStream in = MatchRule.class.getClassLoader().getResourceAsStream("application.properties");
+            properties = new Properties();
+            properties.load(in);
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

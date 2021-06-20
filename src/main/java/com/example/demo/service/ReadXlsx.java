@@ -18,19 +18,21 @@ public class ReadXlsx {
         File file = new File(filePath);
         return read(file, page);
     }
+
     public List<Word> read(String filePath) throws IOException, InvalidFormatException {
         return read(filePath, 0);
     }
+
     public List<Word> read(File file, int page) throws IOException, InvalidFormatException {
         ArrayList<Word> words = new ArrayList<>();
         XSSFWorkbook xssfWorkbook = new XSSFWorkbook(file);
         XSSFSheet sheet = xssfWorkbook.getSheetAt(page);
         Iterator<Row> rowIterator = sheet.rowIterator();
         int num = 0;
-        while(rowIterator.hasNext()){
+        while (rowIterator.hasNext()) {
             Row next = rowIterator.next();
             Word word = new Word();
-            if(next.getCell(0) == null)
+            if (next.getCell(0) == null)
                 continue;
             word.setNum(num);
             word.setTime(next.getCell(0).getStringCellValue());
@@ -43,6 +45,7 @@ public class ReadXlsx {
         xssfWorkbook.close();
         return words;
     }
+
     public List<Word> read(File file) throws IOException, InvalidFormatException {
         return read(file, 0);
     }

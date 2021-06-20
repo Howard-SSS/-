@@ -1,8 +1,5 @@
 package com.example.demo.service;
 
-import cn.hutool.Hutool;
-import cn.hutool.http.HtmlUtil;
-import cn.hutool.http.HttpRequest;
 import com.example.demo.baike.Wiki;
 import com.example.demo.empty.Word;
 import com.example.demo.regex.MatchRule;
@@ -18,7 +15,7 @@ import java.util.Map;
 
 public class WriteDocx {
 
-    private void write(XWPFDocument xwpfDocument, Word word){
+    private void write(XWPFDocument xwpfDocument, Word word) {
         XWPFParagraph paragraph = xwpfDocument.createParagraph();
         XWPFRun run = paragraph.createRun();
         run.setText("Ch" + word.getNum());
@@ -32,11 +29,12 @@ public class WriteDocx {
         run.addBreak();
 
         MatchRule matchRule = new MatchRule();
-        matchRule.compile("ONE_AND_TWO");
+        matchRule.compile("wiki");
         Map<String, String> map = matchRule.match(Wiki.getPageBody(word.getName()));
         otherWrite(run, map);
     }
-    private void write(XWPFDocument xwpfDocument, List<Word> words){
+
+    private void write(XWPFDocument xwpfDocument, List<Word> words) {
         words.forEach((word) -> this.write(xwpfDocument, word));
     }
 
@@ -49,8 +47,8 @@ public class WriteDocx {
         xwpfDocument.close();
     }
 
-    public static void otherWrite(XWPFRun xwpfRun, Map<String, String> map){
-        map.forEach((k,v) -> {
+    public static void otherWrite(XWPFRun xwpfRun, Map<String, String> map) {
+        map.forEach((k, v) -> {
             xwpfRun.setText(k);
             xwpfRun.addBreak();
             xwpfRun.setText(v);
