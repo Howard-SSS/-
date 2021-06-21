@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.baike.Baidu;
 import com.example.demo.baike.Wiki;
 import com.example.demo.empty.Word;
+import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -34,8 +35,8 @@ public class WriteDocx {
     private void write(XWPFDocument xwpfDocument, Word word) {
         XWPFParagraph paragraph = xwpfDocument.createParagraph();
         XWPFRun run = paragraph.createRun();
-        run.setFontFamily("宋体");
-        run.setFontSize(18);
+        run.setFontFamily("Times New Roman");
+        run.setFontSize(14);// 小四
         run.setText("Ch" + word.getNum());
         run.addBreak();
         run.setText(word.getTime() + " ");
@@ -56,7 +57,7 @@ public class WriteDocx {
         map = new Wiki().match(cn_name, properties.getProperty("wiki"), 2);
         if(map.size() == 0)
             map = new Baidu().match(cn_name, properties.getProperty("baidu"), 2);
-        otherWrite(run, map);
+        otherWrite(paragraph, map);
     }
 
     private void write(XWPFDocument xwpfDocument, List<Word> words) {
@@ -72,12 +73,20 @@ public class WriteDocx {
         xwpfDocument.close();
     }
 
-    public static void otherWrite(XWPFRun xwpfRun, Map<String, String> map) {
+    public static void otherWrite(XWPFParagraph xwpfParagraph, Map<String, String> map) {
         map.forEach((k, v) -> {
-            xwpfRun.setText(k);
-            xwpfRun.addBreak();
-            xwpfRun.setText(v);
-            xwpfRun.addBreak();
+            XWPFRun title = xwpfParagraph.createRun();
+            title.setBold(true);
+            title.setFontFamily("宋体");
+            title.setFontSize(14);// 小四
+            title.setText(k);
+            title.addBreak();
+            title.setUnderline(UnderlinePatterns.THICK);
+            XWPFRun content = xwpfParagraph.createRun();
+            content.setFontFamily("宋体");
+            content.setFontSize(14);
+            content.setText(v);
+            content.addBreak();
         });
     }
 }
