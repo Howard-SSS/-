@@ -16,7 +16,7 @@ public abstract class Abstract {
      * @return
      */
     public String getPageBody(String cn_name){
-        String body = HttpRequest.get(getUrl() + cn_name).timeout(3000).execute().body();
+        String body = HttpRequest.get(getUrl() + cn_name).timeout(5000).execute().body();
         //去除<a><img>标签
         return HtmlUtil.unwrapHtmlTag(body, "a","img");
     }

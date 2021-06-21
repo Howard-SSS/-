@@ -46,11 +46,12 @@ public class WriteDocx {
         run.setText(word.getDescribe());
         run.addBreak();
 
+        //提取括号里的中文名
         Pattern p = Pattern.compile("\\((.*)\\)");
         Matcher m = p.matcher(word.getName());
         m.find();
-        //提取中文名
         String cn_name = m.group(1);
+
         Map<String, String> map = null;
         map = new Wiki().match(cn_name, properties.getProperty("wiki"), 2);
         if(map.size() == 0)
