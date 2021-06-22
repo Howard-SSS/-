@@ -82,11 +82,14 @@ public class WriteDocx {
             title.setText(k);
             title.addBreak();
             title.setUnderline(UnderlinePatterns.THICK);
-            XWPFRun content = xwpfParagraph.createRun();
-            content.setFontFamily("宋体");
-            content.setFontSize(14);
-            content.setText(v);
-            content.addBreak();
+            String[] arr = v.split("\n");
+            for(String s : arr){
+                XWPFRun content = xwpfParagraph.createRun();
+                content.setFontFamily("宋体");
+                content.setFontSize(14);
+                content.setText(s);
+                content.addBreak();
+            }
         });
     }
 }
