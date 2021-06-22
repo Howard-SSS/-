@@ -83,6 +83,7 @@ public class WriteDocx {
             title.addBreak();
             title.setUnderline(UnderlinePatterns.THICK);
             String[] arr = v.split("\n");
+            // 爬取的内容分段
             for(String s : arr){
                 XWPFRun content = xwpfParagraph.createRun();
                 content.setFontFamily("宋体");
