@@ -29,7 +29,7 @@ public abstract class Abstract {
         while(num-- > 0){
             if (!matcher.find())
                 break;
-            String k = matcher.group(1);
+            String k = HtmlUtil.cleanHtmlTag(matcher.group(1));
             // 去除标签
             String v = HtmlUtil.cleanHtmlTag(matcher.group(2));
             map.put(k, v);
